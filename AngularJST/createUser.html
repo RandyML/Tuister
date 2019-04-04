@@ -1,0 +1,29 @@
+<br><br><br>
+<div class="row justify-content-center">
+	<div class="col-4">
+		<form>
+		  <div class="form-group">
+		    <input type="text" class="form-control" name="name" placeholder="Nombre completo" aria-describedby="nameHelp" required="true" ng-model="usuario.name">
+		  </div>
+		  <div class="form-group">
+		    <input type="text" class="form-control" name="nickname" placeholder="Nombre de usuario" aria-describedby="nicknameHelp" required="true" ng-model="usuario.nickname">
+		  </div>
+		  <div class="form-group">
+		    <input type="email" class="form-control" name="email" placeholder="Correo" aria-describedby="nameHelp" required="true" ng-model="usuario.email">
+		    <small id="emailHelp" class="form-text text-muted">Puede que compartamos tu información personal, pero solo un poquito.</small>
+		  </div>
+		  <div class="form-group">
+		    <input type="password" class="form-control" name="password" placeholder="Contraseña" aria-describedby="passwordHelp" required="true" ng-model="usuario.password">
+		  </div>
+		  <div class="form-group">
+		    <input type="password" class="form-control" name="password2" placeholder="Confirma tu contraseña" aria-describedby="passwordHelp" required="true" ng-model="comprobar.password">
+		  </div>
+		  <button type="submit" ng-click="crearUsuario()" class="btn btn-primary">Crear usuario</button>
+		</form>
+		<a href="#/" class="btn btn-dark">Ya tengo cuenta</a>
+
+		
+	</div>	
+</div>
+
+

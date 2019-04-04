@@ -1,0 +1,7 @@
+<nav class="navbar fixed-top navbar-light" ng-controller="Signup">
+	<a class="nav-link active" href="index.html">Tuister.com</a>
+	<a class="nav-link" href="#/login" ng-if="!logeado">Iniciar sesión</a>
+	<a class="nav-link" href="#" ng-if="logeado">
+		<div ng-click="cerrarSesion()">Cerrar sesión</div>
+	</a>
+</nav>

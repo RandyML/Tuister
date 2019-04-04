@@ -1,0 +1,195 @@
+<!-- aqui se crean los posts -->
+<br><br><br>
+<form>
+  <div class="container">
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Titulo</label>
+    <input type="text" class="form-control" name="title" id="exampleFormControlInput1" placeholder="Titulo" ng-model="post.title">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlInput2">Contenido</label>
+    <input type="text" class="form-control" name="title" id="exampleFormControlInput2" placeholder="" ng-model="post.body">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlFile3">¡Comparte una imagen!</label>
+    <input type="file" name="imagen" file-model="myFile" class="form-control-file" id="exampleFormControlFile3">
+  </div>
+  <button class="btn btn-primary"type="submit" ng-click="uploadFile()">Publicar Post</button>
+  </div>
+</form>
+<br><br>
+<!-- aqui se muestran los posts -->
+<div class="container" ng-repeat="post in posts">
+  <div class="row justify-content-center">
+    <!-- Columna de imagen y titulo -->
+    <div class="col-6">
+      <h4 class="mt-0">{{post.title}}</h4>
+      <img ng-if="post.imagen_url" class="img-thumbnail" src="../imagenes/{{post.imagen_url}}" alt="Post Image" style="width: 100%; height: 150px;">
+    </div>
+    <div class="col-2">
+      <div class="btn-group" role="group" aria-label="Button group with nested dropdown" ng-if="post.user_id == identificado">
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editarPost" ng-click="setPost(post.id)">Editar</button>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#borrarPost" ng-click="setPost(post.id)">&times</button>
+
+      </div>
+
+    </div>
+  </div>
+  <br>
+  <!-- columna de contenido -->
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <div class="media">
+        <div class="media-body">
+          {{post.body}}  <small> subida por {{ post.nickname }}</small>
+          <!-- <div ng-controller="Likes">
+            <button type="button" class="btn btn-primary" ng-click="darLike(post.id)">{{post.num_likes}} likes</button>
+          </div> -->
+          <!-- espacio para comentarios -->
+          <div id="accordion">
+            <div class="card">
+              <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne{{post.id}}" aria-expanded="true" aria-controls="collapseOne">
+                    Comentarios
+                  </button>
+                </h5>
+              </div>
+              <div ng-controller="Likes">
+                <button type="button" class="btn btn-primary" ng-click="darLike(post.id)">{{post.num_likes}} likes</button>
+              </div>
+              <div id="collapseOne{{post.id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <!-- ciclo de comentarios -->
+                <div ng-controller="Comments">
+                  <div class="card-body" ng-repeat="comment in comments" ng-if="comment.post_id == post.id">
+                    <img ng-if="comment.imagen_url" class="img-thumbnail" src="../imagenes/{{comment.imagen_url}}" alt="Comment Image" style="width: 100%; height: 150px;">
+                    <p>{{comment.body}}</p> <small> subida por {{ comment.nickname }}</small>
+                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <div ng-controller="Likes">
+                      <button type="button" class="btn btn-outline-primary" ng-click="darCommentLike(comment.id)">{{comment.num_likes}} Likes</button>
+                    </div>
+                    <button type="button" ng-if="comment.user_id == identificado" class="btn btn-outline-secondary" data-toggle="modal" data-target="#editarComment" ng-click="setComment(comment.id)">Editar</button>
+                    <button type="button" ng-if="comment.user_id == identificado" class="btn btn-outline-danger" data-toggle="modal" data-target="#borrarComment" ng-click="setComment(comment.id)">&times</button>
+
+<!-- Modal de edicion de comentario -->
+<div class="modal fade" id="editarComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar comentario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleFormControlInput2">Comentario</label>
+            <input type="text" class="form-control" name="title" id="exampleFormControlInput2" placeholder="¿Qué estas pensando?" ng-model="dataComment.body">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" ng-click="editComment()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal de eliminar comentario -->
+<div class="modal fade" id="borrarComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar comentario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Seguro que quieres eliminar este comentario?</p>
+        <p>Esta es una acción irreversible</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="deleteComment()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+                    </div>
+                  </div>
+                  <!-- Aquí se añade un comentario -->
+                    <form>
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="title" id="exampleFormControlInput2" placeholder="Añade un comentario :)" ng-model="comment.body">
+                      </div>
+                      <div class="form-group">
+                        <input type="file" name="imagen" file-model="myCommentFile" class="form-control-file" id="exampleFormControlFile3">
+                      </div>
+                      <button type="submit" ng-click="uploadFileComment(post.id)">Enviar comentario!</button>
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <br><br>
+</div>
+
+<!-- Modal de edicion de post -->
+<div class="modal fade" id="editarPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Post</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Titulo</label>
+            <input type="text" class="form-control" name="title" id="exampleFormControlInput1" placeholder="Cuéntame lo que te pasa :)" ng-model="dataPost.title">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput2">Contenido</label>
+            <input type="text" class="form-control" name="title" id="exampleFormControlInput2" placeholder="¿Qué estas pensando?" ng-model="dataPost.body">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" ng-click="editPost()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal de eliminar post -->
+<div class="modal fade" id="borrarPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar Post</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Seguro que quieres eliminar este post?</p>
+        <p>Esta es una acción irreversible</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="deletePost()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
